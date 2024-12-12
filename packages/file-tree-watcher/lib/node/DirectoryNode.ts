@@ -18,12 +18,7 @@ export class DirectoryNode extends Node {
     this.destroy?.();
   }
 
-  constructor(
-    id: string,
-    context: FileContext,
-    stat: fs.Stats,
-    setup?: SetupFn
-  ) {
+  constructor(id: string, context: FileContext, stat?: fs.Stats, setup?: SetupFn) {
     super(id, context, stat, setup);
   }
 
@@ -37,9 +32,7 @@ export class DirectoryNode extends Node {
       }
 
       const id = paths[i];
-      const target: ChildNode | undefined = node.children.find(
-        (node) => node.id === id
-      );
+      const target: ChildNode | undefined = node.children.find((node) => node.id === id);
 
       if (!target) {
         return;
@@ -69,9 +62,7 @@ export class DirectoryNode extends Node {
               : "dir"
             : "file"
           : "dir";
-      const context = FileContext.parse(
-        join(this.$.fullpath, paths.slice(0, i + 1).join("/"))
-      );
+      const context = FileContext.parse(join(this.$.fullpath, paths.slice(0, i + 1).join("/")));
 
       target = node.children.find((node) => node.id === id);
 
@@ -86,8 +77,7 @@ export class DirectoryNode extends Node {
       if (i < paths.length - 1) {
         if (target.type !== "dir") {
           throw new Error(
-            "Cannot create a directory inside a file: " +
-              paths.slice(0, i + 1).join("/")
+            "Cannot create a directory inside a file: " + paths.slice(0, i + 1).join("/"),
           );
         }
 
@@ -118,10 +108,7 @@ export class DirectoryNode extends Node {
       }
 
       if (i === paths.length - 1) {
-        const [removed] = node.children.splice(
-          node.children.indexOf(target),
-          1
-        );
+        const [removed] = node.children.splice(node.children.indexOf(target), 1);
         if (removed.type === "dir") {
           DirectoryNode.destroy(removed);
         }

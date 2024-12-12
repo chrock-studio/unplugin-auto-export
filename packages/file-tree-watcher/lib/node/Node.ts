@@ -7,19 +7,18 @@ import { ChildNode } from "./ChildNode";
 export class Node {
   readonly id: string;
   readonly $: FileContext;
-  @signal accessor stat: Stats;
+  @signal accessor stat: Stats | undefined;
 
   destroy?: void | (() => void);
   protected _destroy() {
     this.destroy?.();
-    // @ts-expect-error -- release the stat.
     this.stat = undefined;
   }
   static destroy(node: Node) {
     node._destroy();
   }
 
-  constructor(id: string, context: FileContext, stat: Stats, setup?: SetupFn) {
+  constructor(id: string, context: FileContext, stat?: Stats, setup?: SetupFn) {
     this.id = id;
     this.$ = context;
     this.stat = stat;

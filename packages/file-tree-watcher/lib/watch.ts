@@ -24,21 +24,17 @@ export interface Watching {
   watcher: chokidar.FSWatcher;
 }
 
-export const watch = (
-  paths: string[],
-  { setup, ...options }: WatchOptions = {}
-) => {
+export const watch = (paths: string[], { setup, ...options }: WatchOptions = {}) => {
   return Object.fromEntries(
     paths.map<[string, Watching]>((path) => {
-      const stat = fs.statSync(path);
-      if (!stat.isDirectory()) {
+      const stat = fs.existsSync(path) ? fs.statSync(path) : undefined;
+      if (stat && !stat.isDirectory()) {
         throw new Error("The path must be a directory: " + path);
       }
 
       const context = FileContext.parse(path);
       const node = new DirectoryNode(context.basename, context, stat, setup);
-      const getRelativePath = (fullpath: string) =>
-        fullpath.replace(`${path}/`, "");
+      const getRelativePath = (fullpath: string) => fullpath.replace(`${path}/`, "");
 
       const add = (watched: string, stat: fs.Stats) => {
         if (watched === path) {
@@ -66,6 +62,6 @@ export const watch = (
         .on("unlinkDir", remove);
 
       return [path, { node, watcher }];
-    })
+    }),
   );
 };
