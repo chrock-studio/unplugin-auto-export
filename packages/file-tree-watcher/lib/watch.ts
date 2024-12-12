@@ -32,7 +32,7 @@ export const watch = (paths: string[], { setup, ...options }: WatchOptions = {})
         throw new Error("The path must be a directory: " + path);
       }
 
-      const context = FileContext.parse(path);
+      const context = FileContext.parse(path, "dir");
       const node = new DirectoryNode(context.basename, context, stat, setup);
       const getRelativePath = (fullpath: string) => fullpath.replace(`${path}/`, "");
 

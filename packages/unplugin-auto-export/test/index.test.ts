@@ -39,6 +39,21 @@ describe("unplugin-auto-export", () => {
     stop();
   });
 
+  it("should export 'boo.ns' in 'test/folder/index.ts' like namespace", async () => {
+    const stop = create({
+      paths: ["test/folder"],
+      debounce: 0,
+    });
+
+    await fs.mkdir("test/folder/boo.ns", { recursive: true });
+    await fs.writeFile("test/folder/boo.ns/index.ts", "export const boo = 'bar';");
+    await sleep(500);
+    const content = await fs.readFile("test/folder/index.ts", "utf-8");
+    expect(content).toContain(`export * as Boo from "./boo.ns";`);
+
+    stop();
+  });
+
   it("should ignore 'test/folder/ignore' folder", async () => {
     const stop = create({
       paths: ["test/folder"],

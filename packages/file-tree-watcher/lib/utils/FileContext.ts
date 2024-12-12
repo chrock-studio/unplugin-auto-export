@@ -22,14 +22,18 @@ export interface FileContext {
 }
 
 import { parse as _parse } from "node:path";
+import { ChildNode } from "../node";
 
 export const FileContext = {
-  parse: (fullpath: string): FileContext => {
+  parse: (fullpath: string, type: ChildNode["type"] = "file"): FileContext => {
     const parsed = _parse(fullpath);
+    const filename = type === "dir" ? parsed.base : parsed.name;
+    const extname = type === "dir" ? "" : parsed.ext.slice(1);
+
     return {
       fullpath,
-      filename: parsed.name,
-      extname: parsed.ext.slice(1),
+      filename,
+      extname,
       basename: parsed.base,
       dirname: parsed.dir,
     };

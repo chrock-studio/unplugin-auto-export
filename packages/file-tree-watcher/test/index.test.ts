@@ -40,9 +40,7 @@ describe("file-tree-watcher", () => {
     const watcher = watch(["test/for"], {
       setup(node) {
         if (node.type === "dir" && node.id === "for") {
-          const ids = new Signal.Computed(() =>
-            node.children.map((child) => child.id).sort()
-          );
+          const ids = new Signal.Computed(() => node.children.map((child) => child.id).sort());
           return effect(() => {
             children = ids.get();
           });
@@ -64,9 +62,7 @@ describe("file-tree-watcher", () => {
 
       setup(node) {
         if (node.type === "dir" && node.id === "folder") {
-          const ids = new Signal.Computed(() =>
-            node.children.map((child) => child.id)
-          );
+          const ids = new Signal.Computed(() => node.children.map((child) => child.id));
           return effect(() => {
             children = ids.get();
           });
@@ -103,5 +99,22 @@ describe("file-tree-watcher", () => {
         }
       },
     });
+  });
+
+  it("should extname is empty when the target is a directory", async () => {
+    let resolve: (value: string) => void;
+    const extname = new Promise<string>((r) => (resolve = r));
+
+    const watcher = watch(["test/for"], {
+      setup(node) {
+        if (node.id === "test.ns") {
+          resolve(node.$.extname);
+        }
+      },
+    });
+
+    await fs.mkdir("test/for/test.ns", { recursive: true });
+    expect(await extname).toBe("");
+    close(watcher);
   });
 });

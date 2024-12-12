@@ -62,7 +62,11 @@ export class DirectoryNode extends Node {
               : "dir"
             : "file"
           : "dir";
-      const context = FileContext.parse(join(this.$.fullpath, paths.slice(0, i + 1).join("/")));
+
+      const context = FileContext.parse(
+        join(this.$.fullpath, paths.slice(0, i + 1).join("/")),
+        type,
+      );
 
       target = node.children.find((node) => node.id === id);
 
