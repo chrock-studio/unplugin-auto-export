@@ -1,0 +1,32 @@
+{
+  "name": "@chrock-studio/unplugin-auto-export",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@chrock-studio/tsconfig": "workspace:*",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.10.2",
+    "chokidar": "^4.0.1",
+    "signal-polyfill": "^0.2.1",
+    "signal-utils": "^0.21.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "chokidar": "^4.0.1",
+    "signal-polyfill": "^0.2.1",
+    "signal-utils": "^0.21.0"
+  },
+  "dependencies": {
+    "@chrock-studio/file-tree-watcher": "workspace:*",
+    "lodash-es": "^4.17.21"
+  }
+}

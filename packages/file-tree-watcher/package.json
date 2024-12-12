@@ -1,0 +1,36 @@
+{
+  "name": "@chrock-studio/file-tree-watcher",
+  "version": "0.1.0",
+  "description": "A simple file tree watcher for monitoring changes within a folder.",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "keywords": [],
+  "author": {
+    "name": "JuerGenie",
+    "email": "JuerGenie@outlook.com",
+    "url": "https://github.com/JuerGenie"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@chrock-studio/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "chokidar": "^4.0.1",
+    "signal-polyfill": "^0.2.1",
+    "signal-utils": "^0.21.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "chokidar": "^4.0.1",
+    "signal-polyfill": "^0.2.1",
+    "signal-utils": "^0.21.0"
+  }
+}

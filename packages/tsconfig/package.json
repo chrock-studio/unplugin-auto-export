@@ -1,0 +1,7 @@
+{
+  "name": "@chrock-studio/tsconfig",
+  "type": "module",
+  "exports": {
+    ".": "./tsconfig.json"
+  }
+}
