@@ -6,6 +6,10 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
+  "files": [
+    "package.json",
+    "tsconfig.json"
+  ],
   "exports": {
     ".": "./tsconfig.json"
   }
