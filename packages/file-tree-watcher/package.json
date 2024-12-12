@@ -32,7 +32,8 @@
     "url": "https://github.com/chrock-studio/unplugin-auto-export/tree/main/packages/file-tree-watcher"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "license": "MIT",
   "devDependencies": {

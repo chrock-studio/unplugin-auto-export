@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "type": "module",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "exports": {
     ".": "./tsconfig.json"
