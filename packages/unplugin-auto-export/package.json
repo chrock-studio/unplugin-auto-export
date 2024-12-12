@@ -36,6 +36,9 @@
     "email": "JuerGenie@outlook.com",
     "url": "https://github.com/JuerGenie"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "MIT",
   "devDependencies": {
     "@chrock-studio/tsconfig": "workspace:*",
