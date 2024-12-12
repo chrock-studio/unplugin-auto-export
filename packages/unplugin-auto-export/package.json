@@ -1,14 +1,30 @@
 {
   "name": "@chrock-studio/unplugin-auto-export",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./vite": "./dist/vite.js",
+    "./webpack": "./dist/webpack.js",
+    "./core/formatter": "./dist/core/formatter.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "author": {
+    "name": "JuerGenie",
+    "email": "JuerGenie@outlook.com",
+    "url": "https://github.com/JuerGenie"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@chrock-studio/tsconfig": "workspace:*",
     "@types/lodash-es": "^4.17.12",
@@ -18,15 +34,44 @@
     "signal-utils": "^0.21.0",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "unplugin": "^2.1.0",
+    "vitest": "^2.1.8"
   },
   "peerDependencies": {
     "chokidar": "^4.0.1",
     "signal-polyfill": "^0.2.1",
-    "signal-utils": "^0.21.0"
+    "signal-utils": "^0.21.0",
+    "@nuxt/kit": "^3",
+    "@nuxt/schema": "^3",
+    "esbuild": "*",
+    "rollup": "^3",
+    "vite": ">=3",
+    "webpack": "^4 || ^5"
+  },
+  "peerDependenciesMeta": {
+    "@nuxt/kit": {
+      "optional": true
+    },
+    "@nuxt/schema": {
+      "optional": true
+    },
+    "esbuild": {
+      "optional": true
+    },
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@chrock-studio/file-tree-watcher": "workspace:*",
+    "change-case": "^5.4.4",
     "lodash-es": "^4.17.21"
   }
 }
