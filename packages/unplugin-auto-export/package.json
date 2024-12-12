@@ -7,13 +7,25 @@
     "build": "tsup",
     "test": "vitest"
   },
+  "homepage": "https://github.com/chrock-studio/unplugin-auto-export/tree/main/packages/unplugin-auto-export",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrock-studio/unplugin-auto-export/tree/main/packages/unplugin-auto-export"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./vite": "./dist/vite.js",
     "./webpack": "./dist/webpack.js",
     "./core/formatter": "./dist/core/formatter.js"
   },
-  "keywords": [],
+  "keywords": [
+    "vite",
+    "webpack",
+    "plugin",
+    "unplugin",
+    "auto-export",
+    "codegen"
+  ],
   "files": [
     "dist",
     "package.json",

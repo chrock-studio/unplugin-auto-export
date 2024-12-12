@@ -15,11 +15,21 @@
     "package.json",
     "README.md"
   ],
-  "keywords": [],
+  "keywords": [
+    "file",
+    "file-tree",
+    "watcher",
+    "signal"
+  ],
   "author": {
     "name": "JuerGenie",
     "email": "JuerGenie@outlook.com",
     "url": "https://github.com/JuerGenie"
+  },
+  "homepage": "https://github.com/chrock-studio/unplugin-auto-export/tree/main/packages/file-tree-watcher",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrock-studio/unplugin-auto-export/tree/main/packages/file-tree-watcher"
   },
   "license": "MIT",
   "devDependencies": {

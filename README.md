@@ -1,0 +1,6 @@
+# `@chrock-studio/unplugin-auto-export`
+
+| Package                               | Version                                                                                                                                       | Description                                                                                                    |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `@chrock-studio/unplugin-auto-export` | [![npm](https://img.shields.io/npm/v/@chrock-studio/unplugin-auto-export)](https://www.npmjs.com/package/@chrock-studio/unplugin-auto-export) | See [packages/unplugin-auto-export/README.md](./packages/unplugin-auto-export/README.md) for more information. |
+| `@chrock-studio/file-tree-watcher`    | [![npm](https://img.shields.io/npm/v/@chrock-studio/file-tree-watcher)](https://www.npmjs.com/package/@chrock-studio/file-tree-watcher)       | See [packages/file-tree-watcher/README.md](./packages/file-tree-watcher/README.md) for more information.       |
