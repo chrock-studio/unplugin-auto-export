@@ -41,8 +41,14 @@
     "access": "public"
   },
   "license": "MIT",
+  "dependencies": {
+    "@chrock-studio/file-tree-watcher": "workspace:^",
+    "change-case": "^5.4.4",
+    "lodash-es": "^4.17.21",
+    "unplugin": "^2.1.0"
+  },
   "devDependencies": {
-    "@chrock-studio/tsconfig": "workspace:*",
+    "@chrock-studio/tsconfig": "workspace:^",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.10.2",
     "chokidar": "^4.0.1",
@@ -83,11 +89,5 @@
     "webpack": {
       "optional": true
     }
-  },
-  "dependencies": {
-    "@chrock-studio/file-tree-watcher": "workspace:*",
-    "change-case": "^5.4.4",
-    "lodash-es": "^4.17.21",
-    "unplugin": "^2.1.0"
   }
 }

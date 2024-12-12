@@ -42,7 +42,7 @@ importers:
   packages/file-tree-watcher:
     devDependencies:
       '@chrock-studio/tsconfig':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig
       '@types/node':
         specifier: ^22.10.2
@@ -74,7 +74,7 @@ importers:
   packages/unplugin-auto-export:
     dependencies:
       '@chrock-studio/file-tree-watcher':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../file-tree-watcher
       '@nuxt/kit':
         specifier: ^3
@@ -105,7 +105,7 @@ importers:
         version: 5.97.1(esbuild@0.24.0)
     devDependencies:
       '@chrock-studio/tsconfig':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig
       '@types/lodash-es':
         specifier: ^4.17.12
