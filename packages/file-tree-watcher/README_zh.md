@@ -1,4 +1,4 @@
-# `@chrock-studio/file-tree-wathcer`
+# `@chrock-studio/file-tree-watcher`
 
 一个简单的文件树监听器，用于监听文件夹内文件的变化。
 
@@ -9,13 +9,13 @@
 ## 安装
 
 ```bash
-npm install @chrock-studio/file-tree-wathcer signal-polyfill signal-utils chokidar
+npm install @chrock-studio/file-tree-watcher signal-polyfill signal-utils chokidar
 ```
 
 ## 使用
 
 ```typescript
-import { watch } from '@chrock-studio/file-tree-wathcer';
+import { watch } from '@chrock-studio/file-tree-watcher';
 import { Signal } from "signal-polyfill";
 import { reaction } from "signal-utils/subtle/reaction";
 
