@@ -57,7 +57,7 @@ describe("unplugin-auto-export", () => {
   it("should ignore 'test/folder/ignore' folder", async () => {
     const stop = create({
       paths: ["test/folder"],
-      ignored: [/^test\/folder\/ignore($|\/)/],
+      ignored: [/\/test\/folder\/ignore($|\/)/],
       debounce: 0,
     });
 
@@ -65,6 +65,21 @@ describe("unplugin-auto-export", () => {
     await fs.writeFile("test/folder/ignore/file.ts", "export const foo = 'bar';");
     await sleep(500);
     expect(existsSync("test/folder/ignore/index.ts")).toBe(false);
+
+    stop();
+  });
+
+  it("should remove 'test/folder/created' from 'test/folder/index.ts' after 'test/folder/created' is deleted", async () => {
+    const stop = create({
+      paths: ["test/folder"],
+      debounce: 0,
+    });
+
+    await sleep(500);
+    await fs.rm("test/folder/created", { recursive: true, force: true });
+    await sleep(500);
+    const content = await fs.readFile("test/folder/index.ts", "utf-8");
+    expect(content).not.toContain(`export * as Created from "./created";`);
 
     stop();
   });

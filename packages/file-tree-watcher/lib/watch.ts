@@ -2,6 +2,7 @@ import fs from "node:fs";
 import * as chokidar from "chokidar";
 import { FileContext } from "./utils/FileContext.js";
 import { type ChildNode, DirectoryNode } from "./node/index.js";
+import { join } from "node:path";
 
 export interface SetupFn {
   /**
@@ -26,7 +27,9 @@ export interface Watching {
 
 export const watch = (paths: string[], { setup, ...options }: WatchOptions = {}) => {
   return Object.fromEntries(
-    paths.map<[string, Watching]>((path) => {
+    paths.map<[string, Watching]>((target) => {
+      const path = join(process.cwd(), target);
+
       const stat = fs.existsSync(path) ? fs.statSync(path) : undefined;
       if (stat && !stat.isDirectory()) {
         throw new Error("The path must be a directory: " + path);
@@ -61,7 +64,7 @@ export const watch = (paths: string[], { setup, ...options }: WatchOptions = {})
         .on("unlink", remove)
         .on("unlinkDir", remove);
 
-      return [path, { node, watcher }];
+      return [target, { node, watcher }];
     }),
   );
 };

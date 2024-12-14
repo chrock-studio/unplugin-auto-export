@@ -113,9 +113,7 @@ export class DirectoryNode extends Node {
 
       if (i === paths.length - 1) {
         const [removed] = node.children.splice(node.children.indexOf(target), 1);
-        if (removed.type === "dir") {
-          DirectoryNode.destroy(removed);
-        }
+        Node.destroy(removed);
         return;
       }
 

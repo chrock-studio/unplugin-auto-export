@@ -6,6 +6,9 @@ import { describe, it, expect, vi } from "vitest";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// await fs.rm("test/for", { recursive: true, force: true });
+// await sleep(500);
+
 describe("file-tree-watcher", () => {
   it("should watch a directory", async () => {
     const helloFn = vi.fn();
@@ -113,8 +116,28 @@ describe("file-tree-watcher", () => {
       },
     });
 
-    await fs.mkdir("test/for/test.ns", { recursive: true });
+    await fs.mkdir("test/for/assert/test.ns", { recursive: true });
     expect(await extname).toBe("");
+    close(watcher);
+  });
+
+  it("should remove the node when the file is removed", async () => {
+    const removeFn = vi.fn();
+
+    const watcher = watch(["test/for"], {
+      setup(node) {
+        if (node.id === "test_for_remove.txt") {
+          return () => removeFn();
+        }
+      },
+    });
+
+    const file = "test/for/assert/test_for_remove.txt";
+    await fs.writeFile(file, "hello~");
+    await sleep(100);
+    await fs.rm(file);
+    await sleep(100);
+
     close(watcher);
   });
 });
