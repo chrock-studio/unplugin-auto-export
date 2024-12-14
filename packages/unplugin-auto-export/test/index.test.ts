@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { describe, it, expect } from "vitest";
 
-import { create } from "@chrock-studio/unplugin-auto-export";
+import { create } from "../lib";
 import { existsSync } from "node:fs";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -80,6 +80,19 @@ describe("unplugin-auto-export", () => {
     await sleep(500);
     const content = await fs.readFile("test/folder/index.ts", "utf-8");
     expect(content).not.toContain(`export * as Created from "./created";`);
+
+    stop();
+  });
+
+  it("should not create export for empty folder", async () => {
+    const stop = create({
+      paths: ["test/folder"],
+      debounce: 0,
+    });
+
+    await fs.mkdir("test/folder/empty", { recursive: true });
+    await sleep(100);
+    expect(await fs.readFile("test/folder/index.ts", "utf-8")).not.toContain(`export * from "./empty";`);
 
     stop();
   });

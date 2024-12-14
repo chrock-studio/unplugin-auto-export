@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { watch, close } from "@chrock-studio/file-tree-watcher";
+import { watch, close } from "../lib";
 import { Signal } from "signal-polyfill";
 import { effect } from "signal-utils/subtle/microtask-effect";
 import { describe, it, expect, vi } from "vitest";

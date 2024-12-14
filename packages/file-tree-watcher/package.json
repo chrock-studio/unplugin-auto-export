@@ -1,6 +1,6 @@
 {
   "name": "@chrock-studio/file-tree-watcher",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple file tree watcher for monitoring changes within a folder.",
   "type": "module",
   "scripts": {

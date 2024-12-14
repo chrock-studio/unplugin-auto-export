@@ -42,6 +42,14 @@ export interface Options extends Omit<WatchOptions, "setup"> {
 }
 
 const indexReg = /^index\.m?(t|j)sx?$/;
+const filterFn = (child: ChildNode) => {
+  // If the child is a directory, it should have an index file.
+  if (child.type === "dir") {
+    return child.children.some((child) => indexReg.test(child.id));
+  }
+  // else, it should not be an index file.
+  return !indexReg.test(child.id);
+}
 
 export const create = ({
   paths,
@@ -61,14 +69,7 @@ export const create = ({
         const children = new Signal.Computed(() =>
           // Filter out index files (index.ts, index.tsx, index.js, index.jsx, index.mjs, index.mts, etc.)
           node.children
-            .filter(
-              (child) =>
-                // If the child is a directory, it should have an index file.
-                (child.type !== "file" &&
-                  child.children.some((child) => indexReg.test(child.id))) ||
-                // else, it should not be an index file.
-                !indexReg.test(child.id),
-            )
+            .filter(filterFn)
             .sort(({ id: a }, { id: b }) => a.localeCompare(b)),
         );
 
