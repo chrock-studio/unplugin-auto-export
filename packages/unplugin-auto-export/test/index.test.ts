@@ -92,7 +92,9 @@ describe("unplugin-auto-export", () => {
 
     await fs.mkdir("test/folder/empty", { recursive: true });
     await sleep(100);
-    expect(await fs.readFile("test/folder/index.ts", "utf-8")).not.toContain(`export * from "./empty";`);
+    expect(await fs.readFile("test/folder/index.ts", "utf-8")).not.toContain(
+      `export * from "./empty";`,
+    );
 
     stop();
   });

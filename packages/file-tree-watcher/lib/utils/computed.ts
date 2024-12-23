@@ -5,7 +5,7 @@ import { Signal } from "signal-polyfill";
  */
 export function computed<Value>(
   target: () => Value,
-  context: ClassGetterDecoratorContext
+  context: ClassGetterDecoratorContext,
 ): () => Value {
   const kind = context.kind;
 
@@ -13,10 +13,7 @@ export function computed<Value>(
     throw new Error(`Can only use @cached on getters.`);
   }
 
-  const caches = new WeakMap<
-    typeof target,
-    WeakMap<object, Signal.Computed<Value>>
-  >();
+  const caches = new WeakMap<typeof target, WeakMap<object, Signal.Computed<Value>>>();
 
   return function (this: unknown) {
     let cache = caches.get(target);
