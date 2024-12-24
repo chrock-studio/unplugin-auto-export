@@ -1,5 +1,5 @@
 import { Node } from "./node";
-import { Watching } from "./watch";
+import { type Watching } from "./watch";
 
 export const close = (watcher: Record<string, Watching>) => {
   Object.values(watcher).forEach(({ node, watcher }) => {

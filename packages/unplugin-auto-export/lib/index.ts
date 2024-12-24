@@ -2,7 +2,7 @@ import { createUnplugin } from "unplugin";
 import { create } from "./core/index.js";
 export { create };
 
-import { Options } from "./core";
+import type { Options } from "./core";
 export type { Options };
 
 let stop: undefined | (() => void);

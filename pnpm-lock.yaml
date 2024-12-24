@@ -55,7 +55,7 @@ importers:
         version: 0.2.1
       signal-utils:
         specifier: ^0.21.0
-        version: 0.21.0(signal-polyfill@0.2.1)
+        version: 0.21.1(signal-polyfill@0.2.1)
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@2.4.1)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
@@ -1880,6 +1880,11 @@ packages:
 
   signal-utils@0.21.0:
     resolution: {integrity: sha512-YG60nBvF+jiEGfg6KqM6YeiB6jGibmJXu1xEByTCr8hd5uASf3xbEats5f0VJKOq8iFKK8U+CK5HCOc6+F2HXQ==}
+    peerDependencies:
+      signal-polyfill: ^0.2.0
+
+  signal-utils@0.21.1:
+    resolution: {integrity: sha512-i9cdLSvVH4j8ql8mz2lyrA93xL499P8wEbIev3ldSriXeUwqh+wM4Q5VPhIZ19gPtIS4BOopJuKB8l1+wH9LCg==}
     peerDependencies:
       signal-polyfill: ^0.2.0
 
@@ -3877,6 +3882,10 @@ snapshots:
   signal-polyfill@0.2.1: {}
 
   signal-utils@0.21.0(signal-polyfill@0.2.1):
+    dependencies:
+      signal-polyfill: 0.2.1
+
+  signal-utils@0.21.1(signal-polyfill@0.2.1):
     dependencies:
       signal-polyfill: 0.2.1
 

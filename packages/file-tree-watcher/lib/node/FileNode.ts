@@ -1,7 +1,7 @@
 import type { Stats } from "node:fs";
 import type { FileContext } from "../utils/FileContext";
 import { Node } from "./Node";
-import { SetupFn } from "../watch";
+import type { SetupFn } from "../watch";
 
 export class FileNode extends Node {
   readonly type = "file";

@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import { SignalArray } from "signal-utils/array";
 import { Node } from "./Node";
-import { ChildNode } from "./ChildNode";
+import { type ChildNode } from "./ChildNode";
 import { FileContext } from "../utils/FileContext";
 import { join } from "node:path";
 import { FileNode } from "./FileNode";

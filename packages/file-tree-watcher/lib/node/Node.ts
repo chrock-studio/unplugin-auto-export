@@ -1,8 +1,8 @@
 import type { Stats } from "node:fs";
 import type { FileContext } from "../utils/FileContext";
 import { signal } from "signal-utils";
-import { SetupFn } from "../watch";
-import { ChildNode } from "./ChildNode";
+import type { SetupFn } from "../watch";
+import type { ChildNode } from "./ChildNode";
 
 export class Node {
   readonly id: string;

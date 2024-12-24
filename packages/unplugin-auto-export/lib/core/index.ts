@@ -41,6 +41,7 @@ export interface Options extends Omit<WatchOptions, "setup"> {
   debounce?: number;
 }
 
+// Filter out index files (index.ts, index.tsx, index.js, index.jsx, index.mjs, index.mts, etc.)
 const indexReg = /^index\.m?(t|j)sx?$/;
 const filterFn = (child: ChildNode) => {
   // If the child is a directory, it should have an index file.
@@ -49,7 +50,9 @@ const filterFn = (child: ChildNode) => {
   }
   // else, it should not be an index file.
   return !indexReg.test(child.id);
-}
+};
+
+const compareFn = ({ id: a }: ChildNode, { id: b }: ChildNode) => a.localeCompare(b);
 
 export const create = ({
   paths,
@@ -66,12 +69,7 @@ export const create = ({
     setup: (node) => {
       // Only handle directories.
       if (node.type === "dir") {
-        const children = new Signal.Computed(() =>
-          // Filter out index files (index.ts, index.tsx, index.js, index.jsx, index.mjs, index.mts, etc.)
-          node.children
-            .filter(filterFn)
-            .sort(({ id: a }, { id: b }) => a.localeCompare(b)),
-        );
+        const children = new Signal.Computed(() => node.children.filter(filterFn).sort(compareFn));
 
         const indexPath = join(node.$.fullpath, output(node));
         // debounce writeFileSync.
