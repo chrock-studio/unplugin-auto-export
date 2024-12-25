@@ -1,8 +1,5 @@
 {
   "extends": "@chrock-studio/tsconfig",
-  "compilerOptions": {
-    "composite": false
-  },
   "include": ["lib", "tsup.config.ts"],
   "exclude": ["node_modules"]
 }
