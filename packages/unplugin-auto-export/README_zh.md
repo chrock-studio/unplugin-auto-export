@@ -34,34 +34,34 @@ src
 ```
 
 ```ts
-import { defineConfig } from 'vite'
-import autoExport from '@chrock-studio/unplugin-auto-export'
+import { defineConfig } from "vite";
+import autoExport from "@chrock-studio/unplugin-auto-export";
 
 export default defineConfig({
   plugins: [
     autoExport.vite({
-      paths: ['src/components'], // 不支持通配符，但你仍可以使用 glob 实例
+      paths: ["src/components"], // 不支持通配符，但你仍可以使用 glob 实例
       ignored: /\/path\/to\/ignore($|\/)/, // 忽略指定路径下的文件
-      output: 'index.ts', // 指定生成的导出文件的文件名
-      formatter: (node) => `export * as ${node.$.filename} from './${node.id}'` // 自定义导出格式
-    })
-  ]
-})
+      output: "index.ts", // 指定生成的导出文件的文件名
+      formatter: (node) => `export * as ${node.$.filename} from './${node.id}'`, // 自定义导出格式
+    }),
+  ],
+});
 ```
 
 添加插件后，将会自动扫描 `src/components` 目录下的所有文件，并在扫描到的每个文件夹中生成一份 `index.ts` 文件，内容如下：
 
 ```ts
 // file: src/components/basic.ns/index.ts
-export * from './Card'
-export * from './Progress'
+export * from "./Card";
+export * from "./Progress";
 ```
 
 ```ts
 // file: src/components/index.ts
-export * as Basic from './basic.ns'
-export * from './Button'
-export * from './Input'
+export * as Basic from "./basic.ns";
+export * from "./Button";
+export * from "./Input";
 ```
 
 你可以通过 `import { Basic } from './components'` 来导入 `basic.ns` 文件夹下的所有文件。
@@ -84,9 +84,43 @@ export * from './Input'
   - `(node: ChildNode) => string`
   - 默认为 `import("@chrock-studio/unplugin-auto-export/core/formatter").formatter`
   - 你可以通过函数来自定义导出的格式
+- `builder`: 构建器
+
+  - `(children: ChildNode[], node: ChildNode) => string`
+  - 默认为 `undefined`
+  - 你可以通过函数来自定义 `index` 文件的构建逻辑，例如:
+
+    ```ts
+    ({
+      // ...
+      builder: (children, node) => {
+        const items = children
+          .map((child) => {
+            return {
+              name: child.$.filename,
+              import: `import * as ${child.$.filename} from './${child.id}'`,
+            };
+          })
+          .reduce(
+            (acc, cur) => {
+              acc.import.push(cur.import);
+              acc.name.push(cur.name);
+              return acc;
+            },
+            { import: [], name: [] },
+          );
+        return `${items.import.join("\n")}\n\nexport const ${node.$.filename} = { ${items.name.join(", ")} };`;
+      },
+      // ...
+    });
+    ```
+
+  - 这个选项的优先级高于 `formatter`
+  - 通常情况下，你不需要使用这个选项
+
 - `debounce`：防抖时间
   - `number`
   - 默认为 `100`
   - 用于防止频繁的文件变化导致的重复写入
-  - 你可以通过设置为 `0` 来禁用防抖
+  - 你可以通过设置为 `0` 来禁用防抖 (当出现了原因不明的问题时，可以尝试禁用防抖)
 - `...other`: 任何 `chokidar` 支持的配置项

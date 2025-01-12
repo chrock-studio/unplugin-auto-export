@@ -6,20 +6,26 @@ import type { Options } from "./core";
 export type { Options };
 
 let stop: undefined | (() => void);
+const createSetup = (options: Options) => () => {
+  stop?.();
+  stop = create(options);
+};
 
-export default createUnplugin((options: Options) => ({
-  name: "unplugin-auto-export",
+export default createUnplugin((options: Options) => {
+  const setup = createSetup(options);
 
-  vite: {
-    apply: "serve",
-    configResolved: () => {
-      stop?.();
-      stop = create(options);
+  return {
+    name: "unplugin-auto-export",
+
+    vite: {
+      apply: "serve",
+      configResolved: setup,
     },
-  },
 
-  webpack: () => {
-    stop?.();
-    stop = create(options);
-  },
-}));
+    esbuild: {
+      setup,
+    },
+
+    webpack: setup,
+  };
+});

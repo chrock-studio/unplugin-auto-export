@@ -5,6 +5,12 @@ export interface FormatterFn {
   (node: ChildNode): string;
 }
 
+export const getExportName = (filename: string) => {
+  return /\.ns$/.test(filename)
+    ? pascalCase(filename.substring(0, filename.length - 3))
+    : pascalCase(filename);
+};
+
 const scriptReg = /\.(m?j|t)sx?$/;
 export const formatter: FormatterFn = (node) => {
   const isScriptFile = scriptReg.test(node.$.fullpath);
@@ -13,9 +19,9 @@ export const formatter: FormatterFn = (node) => {
   const exportName =
     isScriptFile || node.type === "dir"
       ? /\.ns$/.test(node.$.filename)
-        ? `* as ${pascalCase(node.$.filename.substring(0, node.$.filename.length - 3))}`
+        ? `* as ${getExportName(node.$.filename)}`
         : "*"
-      : `{ default as ${pascalCase(node.$.filename)} }`;
+      : `{ default as ${getExportName(node.$.filename)} }`;
 
   return `export ${exportName} from "./${importName}";`;
 };

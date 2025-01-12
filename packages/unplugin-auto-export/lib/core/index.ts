@@ -1,10 +1,10 @@
 import { type WatchOptions, type ChildNode, watch, close } from "@chrock-studio/file-tree-watcher";
 import { writeFileSync } from "node:fs";
 import { Signal } from "signal-polyfill";
-import { reaction } from "signal-utils/subtle/reaction";
 import { type FormatterFn, formatter as defaultFormatter } from "./formatter";
 import { join } from "node:path";
 import { debounce } from "lodash-es";
+import { effect } from "signal-utils/subtle/microtask-effect";
 
 export interface Options extends Omit<WatchOptions, "setup"> {
   /**
@@ -13,17 +13,6 @@ export interface Options extends Omit<WatchOptions, "setup"> {
    * @example ["src/components", "src/pages"]
    */
   paths: string[];
-  /**
-   * Formatter function to generate export statements.
-   *
-   * Default formatter:
-   *
-   * ```ts
-   * (node: ChildNode) => `export * from "./${node.id}";` // for js or ts
-   * (node: ChildNode) => `export { default as ${node.id} } from "./${node.id}";` // for other extensions
-   * ```
-   */
-  formatter?: FormatterFn;
   /**
    * Output file name.
    *
@@ -39,6 +28,42 @@ export interface Options extends Omit<WatchOptions, "setup"> {
    * Set to `0` to disable debounce.
    */
   debounce?: number;
+
+  /**
+   * Formatter function to generate export statements.
+   *
+   * Default formatter:
+   *
+   * ```ts
+   * (node: ChildNode) => `export * from "./${node.id}";` // for js or ts
+   * (node: ChildNode) => `export { default as ${node.id} } from "./${node.id}";` // for other extensions
+   * ```
+   */
+  formatter?: FormatterFn;
+  /**
+   * Custom builder function to generate `index` file content.
+   *
+   * Default builder:
+   *
+   * ```ts
+   * (children: ChildNode[], current: ChildNode) => children.map((node) => formatter(node)).join("\n") || "export {};") + "\n"
+   * ```
+   */
+  builder?: (children: ChildNode[], current: ChildNode) => string;
+
+  onContentChange?: (node: ChildNode, nv: string) => void;
+}
+namespace Options {
+  export const hasFormatter = (
+    options: Partial<Options>,
+  ): options is Required<Pick<Options, "formatter">> => {
+    return "formatter" in options && typeof options.formatter === "function";
+  };
+
+  export const hasBuilder = (
+    options: Partial<Options>,
+  ): options is Required<Pick<Options, "builder">> =>
+    "builder" in options && typeof options.builder === "function";
 }
 
 // Filter out index files (index.ts, index.tsx, index.js, index.jsx, index.mjs, index.mts, etc.)
@@ -56,13 +81,20 @@ const compareFn = ({ id: a }: ChildNode, { id: b }: ChildNode) => a.localeCompar
 
 export const create = ({
   paths,
-  formatter = defaultFormatter,
   output = "index.ts",
   debounce: debounceInterval = 100,
+  onContentChange,
   ...options
 }: Options) => {
   output = ((value: NonNullable<Options["output"]>) =>
     typeof value === "string" ? () => value : value)(output);
+  const builder = Options.hasBuilder(options)
+    ? options.builder
+    : (() => {
+        const formatter = Options.hasFormatter(options) ? options.formatter : defaultFormatter;
+        return (children: ChildNode[]) =>
+          (children.map((node) => formatter(node)).join("\n") || "export {};") + "\n";
+      })();
 
   const instance = watch(paths, {
     ...options,
@@ -72,26 +104,36 @@ export const create = ({
         const children = new Signal.Computed(() => node.children.filter(filterFn).sort(compareFn));
 
         const indexPath = join(node.$.fullpath, output(node));
+        let removed = false;
         // debounce writeFileSync.
-        let write = (value: string) => writeFileSync(indexPath, value);
+        let write = (value: string) => {
+          if (removed) {
+            return;
+          }
+          writeFileSync(indexPath, value);
+        };
         if (debounceInterval > 0) {
           write = debounce(write, debounceInterval);
         }
 
-        return reaction(
-          () =>
-            // Generate export statements for all children.
-            (children
-              .get()
-              .map((node) => formatter(node))
-              .join("\n") || "export {};") + "\n",
-          (nv, ov) => {
-            // If the content is changed, write to the index file.
-            if (nv !== ov) {
-              write(nv);
-            }
-          },
-        ); // Return the reaction to be disposed when the directory is removed.
+        const content = new Signal.Computed(
+          () => !!children.get().length && (builder(children.get(), node) || "export {};\n"),
+        );
+
+        const stop = effect(() => {
+          const nv = content.get();
+          if (!nv) {
+            return;
+          }
+          onContentChange?.(node, nv);
+          write(nv);
+        });
+
+        return () => {
+          removed = true;
+          // Stop the reaction when the directory is removed.
+          stop();
+        };
       }
     },
   });
