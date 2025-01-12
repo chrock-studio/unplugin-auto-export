@@ -76,6 +76,11 @@ export * from "./Input";
 - `ignored`：忽略文件
   - `string | RegExp | (val: string, stats?: fs.Stats) => boolean`
   - 与 `paths` 一样，你可以通过 `glob` 来进行匹配
+- `filter`: 过滤器
+  - `(node: ChildNode) => boolean`
+  - 默认为 `undefined`
+  - 你可以通过函数来指定哪些文件(夹)需要被导出，与 `ignored` 不同的是，`filter` 是在扫描到文件(夹)后进行的过滤，也就是说，无论 `node` 是否被 `filter` 过滤，都会被监听
+  - 通常情况下，你不需要使用这个选项
 - `output`：导出文件
   - `string | (node: ChildNode) => string`
   - 默认为 `index.ts`

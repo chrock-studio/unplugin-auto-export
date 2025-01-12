@@ -76,6 +76,11 @@ You can import all files in the `basic.ns` folder via `import { Basic } from './
 - `ignored`: Ignore files
   - `string | RegExp | (val: string, stats?: fs.Stats) => boolean`
   - Similar to `paths`, you can use `glob` for matching
+- `filter`: Filter
+  - `(node: ChildNode) => boolean`
+  - Defaults to `undefined`
+  - You can specify which files (or folders) need to be exported via a function. Unlike `ignored`, `filter` is applied after the files (or folders) are scanned. This means that even if a `node` is filtered out by `filter`, it will still be monitored.
+  - Typically, you do not need to use this option.
 - `output`: Export file
   - `string | (node: ChildNode) => string`
   - Defaults to `index.ts`

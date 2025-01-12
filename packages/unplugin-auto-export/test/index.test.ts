@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import { create } from "../lib";
 import { existsSync } from "node:fs";
 import { getExportName } from "../lib/core/formatter";
+import { filter } from "../lib/core/filter";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -18,7 +19,6 @@ describe("unplugin-auto-export", () => {
       debounce: 0,
     });
 
-    await fs.mkdir("test/folder", { recursive: true });
     await fs.mkdir("test/folder/created", { recursive: true });
     await fs.writeFile("test/folder/created/file.ts", "export const foo = 'bar';");
     await sleep(100);
@@ -133,10 +133,7 @@ export ${current.$.filename.endsWith(".ns") ? `const ${getExportName(current.$.f
       },
     });
 
-    let dir = await fs.mkdir("test/for-builder", { recursive: true });
-    console.log("created", dir);
-    dir = await fs.mkdir("test/for-builder/hello.ns", { recursive: true });
-    console.log("created", dir, existsSync(dir!));
+    await fs.mkdir("test/for-builder/hello.ns", { recursive: true });
     await fs.writeFile("test/for-builder/hello.ns/say.ts", "export const hello = 'world';");
     await sleep(100);
     const content = await fs.readFile("test/for-builder/hello.ns/index.ts", "utf-8");
@@ -145,6 +142,32 @@ export ${current.$.filename.endsWith(".ns") ? `const ${getExportName(current.$.f
 export const Hello = { Say };
 `);
 
+    stop();
+  });
+
+  it("should 'test/folder/index.ts' ignore 'test/folder/-ignore-this-folder-but-children' folder and 'test/folder/-ignore-this-folder-but-children/index.ts' should be created", async () => {
+    const stop = create({
+      paths: ["test/folder"],
+      debounce: 0,
+
+      filter: (node) => {
+        return !/(^|\/)-[^/]+$/.test(node.id) && filter(node);
+      },
+
+      onWatch: (node) => {
+        console.log("watched", node.id);
+      },
+    });
+
+    await fs.mkdir("test/folder/-ignore-this-folder-but-children/includes", { recursive: true });
+    await fs.writeFile(
+      "test/folder/-ignore-this-folder-but-children/file.ts",
+      "export const foo = 'bar';",
+    );
+    await sleep(100);
+    expect(existsSync("test/folder/-ignore-this-folder-but-children/index.ts")).toBe(true);
+    const content = await fs.readFile("test/folder/index.ts", "utf-8");
+    expect(content).not.toContain(`export * from "./-ignore-this-folder-but-children";`);
     stop();
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@chrock-studio/unplugin-auto-export",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "scans files in specified directories and generates an `index.ts` file to manage module exports in a batch and automated manner.",
   "type": "module",
   "scripts": {
@@ -17,7 +17,8 @@
     "./vite": "./dist/vite.js",
     "./webpack": "./dist/webpack.js",
     "./esbuild": "./dist/esbuild.js",
-    "./core/formatter": "./dist/core/formatter.js"
+    "./core/formatter": "./dist/core/formatter.js",
+    "./core/filter": "./dist/core/filter.js"
   },
   "keywords": [
     "vite",

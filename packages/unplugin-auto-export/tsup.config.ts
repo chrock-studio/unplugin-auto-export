@@ -8,6 +8,7 @@ export default defineConfig({
     "lib/webpack.ts",
     "lib/esbuild.ts",
     "lib/core/formatter.ts",
+    "lib/core/filter.ts",
   ],
   format: "esm",
   dts: true,
