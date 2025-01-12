@@ -1,6 +1,6 @@
 {
   "name": "@chrock-studio/unplugin-auto-export",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "scans files in specified directories and generates an `index.ts` file to manage module exports in a batch and automated manner.",
   "type": "module",
   "scripts": {

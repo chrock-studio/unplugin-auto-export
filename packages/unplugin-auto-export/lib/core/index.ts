@@ -80,8 +80,6 @@ namespace Options {
 
 const compareFn = ({ id: a }: ChildNode, { id: b }: ChildNode) => a.localeCompare(b);
 
-const tryAddSlash = (value: string) => (value.endsWith("/") ? value : value + "/");
-
 export const create = ({
   paths,
   output = "index.ts",
@@ -91,8 +89,6 @@ export const create = ({
 
   onWatch,
   onContentChange,
-
-  ignored,
 
   ...options
 }: Options) => {
@@ -106,50 +102,13 @@ export const create = ({
           (children.map((node) => formatter(node)).join("\n") || "export {};") + "\n";
       })();
 
-  ignored = Array.isArray(ignored) ? ignored : ignored !== undefined ? [ignored] : [];
-
   const instance = watch(paths, {
-    ignored,
     ...options,
     setup: (node) => {
       // Only handle directories.
       if (node.type === "dir") {
         const children = new Signal.Computed(() => {
-          return node.children
-            .filter((node) => {
-              if (ignored.length) {
-                for (const value of ignored) {
-                  if (value instanceof RegExp) {
-                    if (value.test(node.id)) {
-                      return false;
-                    }
-                  } else {
-                    switch (typeof value) {
-                      case "string":
-                        if (node.id === value) {
-                          return false;
-                        }
-                        break;
-                      case "function":
-                        if (value(node.id)) {
-                          return false;
-                        }
-                        break;
-                      case "object":
-                        if (
-                          (!value.recursive && node.id === value.path) ||
-                          (node.id + "/").startsWith(tryAddSlash(value.path))
-                        ) {
-                          return false;
-                        }
-                    }
-                  }
-                }
-              }
-
-              return filter(node);
-            })
-            .sort(compareFn);
+          return node.children.filter(filter).sort(compareFn);
         });
 
         const indexPath = join(node.$.fullpath, output(node));
